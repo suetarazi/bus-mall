@@ -80,6 +80,8 @@ var handleClickOnImage = function (event){
     var imgClicked = event.target.id;
     if(imgClicked ==='imgLeft' || imgClicked === 'imgCenter' || imgClicked === 'imgRight'){
         imageClicks++;
+
+
     //conditions that increments clicks for imgLeft, imgCenter and imgRight    
     } else if (imgClicked === 'imgLeft') {
         Busmall.allImages[leftIndex].clicked++;
@@ -99,12 +101,12 @@ var handleClickOnImage = function (event){
     
         for(var i=0; i<Busmall.allImages.length; i++){
             var busmall = Busmall.allImages[i];
-            console.log(`${busmall.name} received ${busmall.clicked} votes with ${busmall.viewed} views.`);
+            alert(`${busmall.name} received ${busmall.clicked} votes with ${busmall.viewed} views.`);
         } 
     }else{
             renderBusmall();
-            }
-    };
+    }
+};
     
     
 
