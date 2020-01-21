@@ -10,7 +10,7 @@ var centerIndex = null;
 var rightIndex = null;
 
 var imageClicks = 0;
-var totalClicks = 10; //change this to 25 
+var totalClicks = 25; //change this to 25 
 
 Busmall.allImages=[];
 
