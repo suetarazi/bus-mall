@@ -96,10 +96,15 @@ var handleClickOnImage = function (event){
     if(imageClicks === totalClicks){
         parentBus.removeEventListener('click', handleClickOnImage);
         alert('Thank you for your input. We value your opinion!');
+    
+        for(var i=0; i<Busmall.allImages.length; i++){
+            var busmall = Busmall.allImages[i];
+            console.log(`${busmall.name} received ${busmall.clicked} votes with ${busmall.viewed} views.`);
+        } 
     }else{
-    renderBusmall();
-    }
-};
+            renderBusmall();
+            }
+    };
     
     
 
