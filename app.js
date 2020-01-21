@@ -13,6 +13,7 @@ var imageClicks = 0;
 var totalClicks = 25; //change this to 25 
 
 Busmall.allImages=[];
+var indexArr=['', '', ''];
 
 //Constructor Function
 function Busmall(name, image){
@@ -33,20 +34,37 @@ function randomImage(){
 
 //Display images Function (render?)
 function renderBusmall(){
+    
     do{
     leftIndex = randomImage();
     centerIndex = randomImage();
     rightIndex = randomImage();
+
+// //    former while loop from lab 11:
+//     } while 
+//         (leftIndex === centerIndex || leftIndex === rightIndex || centerIndex === rightIndex);
+// {
+    //updated while loop including array comparison for previous and current populations of images
     } while
-        (leftIndex === centerIndex || leftIndex === rightIndex || centerIndex === rightIndex);
-    
+    (leftIndex === centerIndex || leftIndex === rightIndex || centerIndex === rightIndex || indexArr.includes(leftIndex) ||indexArr.includes(centerIndex) || indexArr.includes(rightIndex));
+
     console.log('renderBusmall');
     imgLeft.src = Busmall.allImages[leftIndex].image;
     Busmall.allImages[leftIndex].viewed++;
+
     imgCenter.src = Busmall.allImages[centerIndex].image;
     Busmall.allImages[centerIndex].viewed++;
+    
     imgRight.src = Busmall.allImages[rightIndex].image;
     Busmall.allImages[rightIndex].viewed++;
+    
+
+    indexArr[0] = leftIndex;
+    indexArr[1] = centerIndex;
+    indexArr[2] = rightIndex;
+    console.log(indexArr[0]);
+
+    
     console.log('bag', bag.viewed);
     console.log('shark', shark.viewed);
     console.log('dragon', dragon.viewed);
@@ -83,17 +101,17 @@ var handleClickOnImage = function (event){
 
 
     //conditions that increments clicks for imgLeft, imgCenter and imgRight    
-    } else if (imgClicked === 'imgLeft') {
-        Busmall.allImages[leftIndex].clicked++;
-    } else if (imgClicked === 'imgCenter'){
-        Busmall.allImages[centerIndex].clicked++;}
-            else if (imgClicked === 'imgRight'){
-                Busmall.allImages[rightIndex].clicked++;
-            } else {
-                alert('That is not a valid selection');
+        if (imgClicked === 'imgLeft') {
+            Busmall.allImages[leftIndex].clicked++;
+        } else if (imgClicked === 'imgCenter'){
+            Busmall.allImages[centerIndex].clicked++;
+        } else if (imgClicked === 'imgRight'){
+                    Busmall.allImages[rightIndex].clicked++;
+                } else {
+                    alert('That is not a valid selection');
+                }
+        console.log(imgClicked);
             }
-    console.log(imgClicked);
-
     //condition that counts the number of total image votes
     if(imageClicks === totalClicks){
         parentBus.removeEventListener('click', handleClickOnImage);
