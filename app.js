@@ -64,7 +64,7 @@ function renderBusmall(){
     indexArr[2] = rightIndex;
     console.log(indexArr[0]);
 
-    
+     
     console.log('bag', bag.viewed);
     console.log('shark', shark.viewed);
     console.log('dragon', dragon.viewed);
@@ -116,23 +116,87 @@ var handleClickOnImage = function (event){
     if(imageClicks === totalClicks){
         parentBus.removeEventListener('click', handleClickOnImage);
         alert('Thank you for your input. We value your opinion!');
-    
         for(var i=0; i<Busmall.allImages.length; i++){
             var busmall = Busmall.allImages[i];
-            alert(`${busmall.name} received ${busmall.clicked} votes with ${busmall.viewed} views.`);
+            console.log(`${busmall.name} received ${busmall.clicked} votes with ${busmall.viewed} views.`);
         } 
+        renderChart();
+        console.log('test');
     }else{
             renderBusmall();
+        }
     }
+    
+    
+    
+    //call render function
+    renderBusmall();
+    
+    
+    
+    //event listener
+    parentBus.addEventListener('click', handleClickOnImage);
+    
+//render chart function
+function renderChart(){
+    var labelData = [];
+    var clickedData = [];
+    var viewedData = [];
+
+    for(var i=0; i<Busmall.allImages.length; i++){
+        labelData.push(Busmall.allImages[i].name);
+        clickedData.push(Busmall.allImages[i].clicked);
+        viewedData.push(Busmall.allImages[i].viewed);
+    }
+    console.log('labelData', labelData);
+    console.log('clickedData', clickedData);
+    console.log('viewedData', viewedData);
+
+    var ctx = document.getElementById('busmallChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labelData,
+            datasets: [{
+                label: '# of Clicks',
+                data: clickedData,
+                backgroundColor: ['Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple', 'Gray', 'Brown', 'Black', 'Pink', 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple', 'Gray', 'Brown', 'Black', 'Pink'],
+            }, {
+                label: '# of Views',
+                data: viewedData,
+                backgroundColor: ['rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)'],
+
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
 };
-    
-    
 
 
-
-//event listener
-parentBus.addEventListener('click', handleClickOnImage);
-
-
-//call render function
-renderBusmall();
