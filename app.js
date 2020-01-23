@@ -145,24 +145,29 @@ var handleClickOnImage = function (event){
 function updateStorage(){
     if (localStorage.length>0){
         getLocalStorageData();
-    } else{
-        //instantiations();
+    } else        
         
         var arrayString = JSON.stringify(Busmall.allImages);
         localStorage.setItem('key', arrayString);
         
     }
- }
+ 
     
     
 //get data out of storage
 function getLocalStorageData (){
-    if (localStorage.length>0){
         var storageData = localStorage.getItem('key');
         var imgData = JSON.parse(storageData);
-        Busmall.allImages = imgData;
-
+        //loop thru imageData and for each image in Busmall.allImages 
+        //Busmall.allImages = imgData;
+  
+        for(i=0; i<Busmall.allImages.length; i++){
+        for(j=0; j<imgData.length; j++){
+            Busmall.allImages[i]=imgData[j];
+        }
     }
+
+
     renderBusmall();
 }
 
