@@ -100,7 +100,7 @@ function instantiations(){
 var handleClickOnImage = function (event){
     //condition to increment total number of image votes
     var imgClicked = event.target.id;
-    if(imgClicked ==='imgLeft' || imgClicked === 'imgCenter' || imgClicked === 'imgRight'){
+            if(imgClicked ==='imgLeft' || imgClicked === 'imgCenter' || imgClicked === 'imgRight'){
         imageClicks++;
 
 
@@ -111,33 +111,56 @@ var handleClickOnImage = function (event){
         } else if (imgClicked === 'imgCenter'){
             Busmall.allImages[centerIndex].clicked++;
             console.log(Busmall.allImages[centerIndex]);
-        } else if (imgClicked === 'imgRight'){
+        } else (imgClicked === 'imgRight')
             Busmall.allImages[rightIndex].clicked++;
             console.log(Busmall.allImages[rightIndex]);
-        } else {
-            alert('That is not a valid selection');
+            // console.log(imgClicked);
         }
-        // console.log(imgClicked);
+        //condition that counts the number of total image votes
+        if(imageClicks === totalClicks){
+            // getLocalStorageData();
+            
+            parentBus.removeEventListener('click', handleClickOnImage);
+            alert('Thank you for your input. We value your opinion!');
+            for(var i=0; i<Busmall.allImages.length; i++){
+                var busmall = Busmall.allImages[i];
+                console.log(`${busmall.name} received ${busmall.clicked} votes with ${busmall.viewed} views.`);
+                updateStorage();
+                
+            } 
+            renderChart();
+            console.log('test');
+        }else
+            renderBusmall();
     }
-    //condition that counts the number of total image votes
-    if(imageClicks === totalClicks){
-       // getLocalStorageData();
+ else { 
+    alert('That is not a valid selection');
+    
+    }    
+};
 
-        parentBus.removeEventListener('click', handleClickOnImage);
-        alert('Thank you for your input. We value your opinion!');
-        for(var i=0; i<Busmall.allImages.length; i++){
-            var busmall = Busmall.allImages[i];
-            console.log(`${busmall.name} received ${busmall.clicked} votes with ${busmall.viewed} views.`);
-            updateStorage();
-                        
-        } 
-        renderChart();
-        console.log('test');
-    }else{
-        renderBusmall();
-    }
+    function setLocalStorageFromMemory(){
+        var arrayString = JSON.stringify(Busmall.allImages);
+        localStorage.setItem('key', arrayString);
 }
 
+function aggregateLocalStorageIntoMemory(Busmall.allImages, imgData){
+    //check memory storage
+    //check out local storage
+    //add clicks from local storage into memory storage
+    //add views from local storage into memory storage
+    // for(var i=0; i<Busmall.allImages.length; i++){
+    //     for(var j=0; j<imgData.length; j++){
+    //          if(Busmall.allImages[i].name === imgData[j].name){
+    //              Busmall.allImages[i].clicked += parseInt(imgData[j].clicked);
+    //              Busmall.allImages[i].viewed += parseInt(imgData[j].clicked);
+    //             // Busmall.allImages[i]=imgData[j];
+
+    //          break;
+    //  }
+
+
+}
 
 
 
@@ -145,38 +168,46 @@ var handleClickOnImage = function (event){
 function updateStorage(){
     if (localStorage.length>0){
         getLocalStorageData();
-    } else        
-        
-        var arrayString = JSON.stringify(Busmall.allImages);
-        localStorage.setItem('key', arrayString);
-        
+    } else {       
+        setLocalStorageFromMemory();
     }
+}
  
     
     
 //get data out of storage
 function getLocalStorageData (){
+    var arrayString = JSON.stringify(Busmall.allImages);
+    localStorage.setItem('key', arrayString);
+
         var storageData = localStorage.getItem('key');
         var imgData = JSON.parse(storageData);
         //loop thru imageData and for each image in Busmall.allImages 
         //Busmall.allImages = imgData;
   
-        for(i=0; i<Busmall.allImages.length; i++){
-        for(j=0; j<imgData.length; j++){
-            Busmall.allImages[i]=imgData[j];
+        for(var i=0; i<Busmall.allImages.length; i++){
+           for(var j=0; j<imgData.length; j++){
+                if(Busmall.allImages[i].name === imgData[j].name){
+                    Busmall.allImages[i].clicked = parseInt(Busmall.allImages[i].clicked) + parseInt(imgData[j].clicked);
+                    Busmall.allImages[i].viewed =  parseInt(Busmall.allImages[i].clicked) + parseInt(imgData[j].clicked);   
+             //   Busmall.allImages[i]=imgData[j];
+                break;
         }
     }
 
 
     renderBusmall();
 }
+}
 
-    //call render function
-    //renderBusmall();
+instantiations();
 
-    instantiations();
-    getLocalStorageData();
+//call render function
+renderBusmall();
 
+if(localStorage.length>0){
+getLocalStorageData();
+}
 
     //event listener
     parentBus.addEventListener('click', handleClickOnImage);
