@@ -23,6 +23,8 @@ function Busmall(name, image){
     this.viewed = 0;
 
     Busmall.allImages.push(this);
+    //update storage after populating Busmall array with .push from line above
+    //updateStorage();
 }
 
 
@@ -34,7 +36,7 @@ function randomImage(){
 
 //Display images Function (render?)
 function renderBusmall(){
-    
+   
     do{
     leftIndex = randomImage();
     centerIndex = randomImage();
@@ -65,32 +67,34 @@ function renderBusmall(){
     console.log(indexArr[0]);
 
      
-    console.log('bag', bag.viewed);
-    console.log('shark', shark.viewed);
-    console.log('dragon', dragon.viewed);
+  //  console.log('bag', bag.viewed);
+  //  console.log('shark', shark.viewed);
+  //  console.log('dragon', dragon.viewed);
 };
 
 //instantiations
-var bag = new Busmall('bag', '/img/bag.jpg');
-var banana = new Busmall('banana', '/img/banana.jpg');
-var bathroom = new Busmall('bathroom', '/img/bathroom.jpg');
-var boots = new Busmall('boots', '/img/boots.jpg');
-var breakfast = new Busmall('breakfast', '/img/breakfast.jpg');
-var bubblegum = new Busmall('bubblegum', '/img/bubblegum.jpg');
-var chair = new Busmall('chair', '/img/chair.jpg');
-var cthulhu = new Busmall('cthulhu', '/img/cthulhu.jpg');
-var dogDuck = new Busmall('dogDuck', '/img/dog-duck.jpg');
-var dragon = new Busmall('dragon', '/img/dragon.jpg');
-var pen = new Busmall('pen', '/img/pen.jpg');
-var petSweep = new Busmall('petSweep', '/img/pet-sweep.jpg');
-var scissors = new Busmall('scissors', '/img/scissors.jpg');
-var shark = new Busmall('shark', '/img/shark.jpg');
-var sweep = new Busmall('sweep', '/img/sweep.png');
-var tauntaun = new Busmall('tauntaun', '/img/tauntaun.jpg');
-var unicorn = new Busmall('unicorn', '/img/unicorn.jpg');
-var usb = new Busmall('usb', '/img/usb.gif');
-var waterCan = new Busmall('waterCan', '/img/water-can.jpg');
-var wineGlass = new Busmall('wineGlass', '/img/wine-glass.jpg');
+function instantiations(){
+    new Busmall('bag', '/img/bag.jpg');
+    new Busmall('banana', '/img/banana.jpg');
+    new Busmall('bathroom', '/img/bathroom.jpg');
+    new Busmall('boots', '/img/boots.jpg');
+    new Busmall('breakfast', '/img/breakfast.jpg');
+    new Busmall('bubblegum', '/img/bubblegum.jpg');
+    new Busmall('chair', '/img/chair.jpg');
+    new Busmall('cthulhu', '/img/cthulhu.jpg');
+    new Busmall('dogDuck', '/img/dog-duck.jpg');
+    new Busmall('dragon', '/img/dragon.jpg');
+    new Busmall('pen', '/img/pen.jpg');
+    new Busmall('petSweep', '/img/pet-sweep.jpg');
+    new Busmall('scissors', '/img/scissors.jpg');
+    new Busmall('shark', '/img/shark.jpg');
+    new Busmall('sweep', '/img/sweep.png');
+    new Busmall('tauntaun', '/img/tauntaun.jpg');
+    new Busmall('unicorn', '/img/unicorn.jpg');
+    new Busmall('usb', '/img/usb.gif');
+    new Busmall('waterCan', '/img/water-can.jpg');
+    new Busmall('wineGlass', '/img/wine-glass.jpg');
+};
 
 //function to handle event listener
 var handleClickOnImage = function (event){
@@ -100,49 +104,85 @@ var handleClickOnImage = function (event){
         imageClicks++;
 
 
-    //conditions that increments clicks for imgLeft, imgCenter and imgRight    
+        //conditions that increments clicks for imgLeft, imgCenter and imgRight    
         if (imgClicked === 'imgLeft') {
             Busmall.allImages[leftIndex].clicked++;
+            console.log(Busmall.allImages[leftIndex]);
         } else if (imgClicked === 'imgCenter'){
             Busmall.allImages[centerIndex].clicked++;
+            console.log(Busmall.allImages[centerIndex]);
         } else if (imgClicked === 'imgRight'){
-                    Busmall.allImages[rightIndex].clicked++;
-                } else {
-                    alert('That is not a valid selection');
-                }
-        console.log(imgClicked);
-            }
+            Busmall.allImages[rightIndex].clicked++;
+            console.log(Busmall.allImages[rightIndex]);
+        } else {
+            alert('That is not a valid selection');
+        }
+        // console.log(imgClicked);
+    }
     //condition that counts the number of total image votes
     if(imageClicks === totalClicks){
+       // getLocalStorageData();
+
         parentBus.removeEventListener('click', handleClickOnImage);
         alert('Thank you for your input. We value your opinion!');
         for(var i=0; i<Busmall.allImages.length; i++){
             var busmall = Busmall.allImages[i];
             console.log(`${busmall.name} received ${busmall.clicked} votes with ${busmall.viewed} views.`);
+            updateStorage();
+                        
         } 
         renderChart();
         console.log('test');
     }else{
-            renderBusmall();
-        }
+        renderBusmall();
     }
+}
+
+
+
+
+//update storage function (i.e. local array --> JSON string)
+function updateStorage(){
+    if (localStorage.length>0){
+        getLocalStorageData();
+    } else{
+        //instantiations();
+        
+        var arrayString = JSON.stringify(Busmall.allImages);
+        localStorage.setItem('key', arrayString);
+        
+    }
+ }
     
     
-    
-    //call render function
+//get data out of storage
+function getLocalStorageData (){
+    if (localStorage.length>0){
+        var storageData = localStorage.getItem('key');
+        var imgData = JSON.parse(storageData);
+        Busmall.allImages = imgData;
+
+    }
     renderBusmall();
-    
-    
-    
+}
+
+    //call render function
+    //renderBusmall();
+
+    instantiations();
+    getLocalStorageData();
+
+
     //event listener
     parentBus.addEventListener('click', handleClickOnImage);
     
-//render chart function
-function renderChart(){
-    var labelData = [];
-    var clickedData = [];
-    var viewedData = [];
-
+    //render chart function
+    function renderChart(){
+        
+        var labelData = [];
+        var clickedData = [];
+        var viewedData = [];
+    
     for(var i=0; i<Busmall.allImages.length; i++){
         labelData.push(Busmall.allImages[i].name);
         clickedData.push(Busmall.allImages[i].clicked);
@@ -198,5 +238,3 @@ function renderChart(){
         }
     });
 };
-
-
