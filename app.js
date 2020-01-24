@@ -73,7 +73,6 @@ function renderBusmall(){
 };
 
 //instantiations
-function instantiations(){
     new Busmall('bag', '/img/bag.jpg');
     new Busmall('banana', '/img/banana.jpg');
     new Busmall('bathroom', '/img/bathroom.jpg');
@@ -94,113 +93,72 @@ function instantiations(){
     new Busmall('usb', '/img/usb.gif');
     new Busmall('waterCan', '/img/water-can.jpg');
     new Busmall('wineGlass', '/img/wine-glass.jpg');
-};
+
+
+// 
+
+
+//     function setLocalStorageFromMemory(){
+//         var arrayString = JSON.stringify(Busmall.allImages);
+//         localStorage.setItem('key', arrayString);
+// }
+
 
 //function to handle event listener
 var handleClickOnImage = function (event){
     //condition to increment total number of image votes
     var imgClicked = event.target.id;
-            if(imgClicked ==='imgLeft' || imgClicked === 'imgCenter' || imgClicked === 'imgRight'){
+    if(imgClicked ==='imgLeft' || imgClicked === 'imgCenter' || imgClicked === 'imgRight'){
         imageClicks++;
 
 
-        //conditions that increments clicks for imgLeft, imgCenter and imgRight    
+    //conditions that increments clicks for imgLeft, imgCenter and imgRight    
         if (imgClicked === 'imgLeft') {
             Busmall.allImages[leftIndex].clicked++;
-            console.log(Busmall.allImages[leftIndex]);
         } else if (imgClicked === 'imgCenter'){
             Busmall.allImages[centerIndex].clicked++;
-            console.log(Busmall.allImages[centerIndex]);
-        } else (imgClicked === 'imgRight')
-            Busmall.allImages[rightIndex].clicked++;
-            console.log(Busmall.allImages[rightIndex]);
-            // console.log(imgClicked);
-        }
-        //condition that counts the number of total image votes
-        if(imageClicks === totalClicks){
-            // getLocalStorageData();
-            
-            parentBus.removeEventListener('click', handleClickOnImage);
-            alert('Thank you for your input. We value your opinion!');
-            for(var i=0; i<Busmall.allImages.length; i++){
-                var busmall = Busmall.allImages[i];
-                console.log(`${busmall.name} received ${busmall.clicked} votes with ${busmall.viewed} views.`);
-                updateStorage();
-                
-            } 
-            renderChart();
-            console.log('test');
-        }else
+        } else if (imgClicked === 'imgRight'){
+                    Busmall.allImages[rightIndex].clicked++;
+                } else {
+                    alert('That is not a valid selection');
+                }
+        console.log(imgClicked);
+            }
+    //condition that counts the number of total image votes
+    if(imageClicks === totalClicks){
+        parentBus.removeEventListener('click', handleClickOnImage);
+        alert('Thank you for your input. We value your opinion!');
+        for(var i=0; i<Busmall.allImages.length; i++){
+            var busmall = Busmall.allImages[i];
+            console.log(`${busmall.name} received ${busmall.clicked} votes with ${busmall.viewed} views.`);
+        } 
+        renderChart();
+        console.log('test');
+    }else{
             renderBusmall();
+            updateStorage();
+        }
     }
- else { 
-    alert('That is not a valid selection');
-    
-    }    
-};
-
-    function setLocalStorageFromMemory(){
-        var arrayString = JSON.stringify(Busmall.allImages);
-        localStorage.setItem('key', arrayString);
-}
-
-function aggregateLocalStorageIntoMemory(Busmall.allImages, imgData){
-    //check memory storage
-    //check out local storage
-    //add clicks from local storage into memory storage
-    //add views from local storage into memory storage
-    // for(var i=0; i<Busmall.allImages.length; i++){
-    //     for(var j=0; j<imgData.length; j++){
-    //          if(Busmall.allImages[i].name === imgData[j].name){
-    //              Busmall.allImages[i].clicked += parseInt(imgData[j].clicked);
-    //              Busmall.allImages[i].viewed += parseInt(imgData[j].clicked);
-    //             // Busmall.allImages[i]=imgData[j];
-
-    //          break;
-    //  }
-
-
-}
-
-
 
 //update storage function (i.e. local array --> JSON string)
 function updateStorage(){
-    if (localStorage.length>0){
-        getLocalStorageData();
-    } else {       
-        setLocalStorageFromMemory();
-    }
-}
- 
-    
-    
-//get data out of storage
-function getLocalStorageData (){
     var arrayString = JSON.stringify(Busmall.allImages);
     localStorage.setItem('key', arrayString);
 
+}
+ 
+        
+//get data out of storage
+function getLocalStorageData (){
+    if(localStorage.length>0){
         var storageData = localStorage.getItem('key');
         var imgData = JSON.parse(storageData);
-        //loop thru imageData and for each image in Busmall.allImages 
-        //Busmall.allImages = imgData;
-  
-        for(var i=0; i<Busmall.allImages.length; i++){
-           for(var j=0; j<imgData.length; j++){
-                if(Busmall.allImages[i].name === imgData[j].name){
-                    Busmall.allImages[i].clicked = parseInt(Busmall.allImages[i].clicked) + parseInt(imgData[j].clicked);
-                    Busmall.allImages[i].viewed =  parseInt(Busmall.allImages[i].clicked) + parseInt(imgData[j].clicked);   
-             //   Busmall.allImages[i]=imgData[j];
-                break;
-        }
-    }
+        Busmall.allImages = imgData;
 
+    }
 
     renderBusmall();
 }
-}
-
-instantiations();
 
 //call render function
 renderBusmall();
@@ -209,8 +167,8 @@ if(localStorage.length>0){
 getLocalStorageData();
 }
 
-    //event listener
-    parentBus.addEventListener('click', handleClickOnImage);
+//event listener
+parentBus.addEventListener('click', handleClickOnImage);
     
     //render chart function
     function renderChart(){
@@ -274,3 +232,4 @@ getLocalStorageData();
         }
     });
 };
+updateStorage();
