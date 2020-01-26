@@ -14,12 +14,16 @@ body {
     color: slategray;
 }
 
-#textsection {
-    width: 400px;
+#textSection {
+    width: 820px;
     text-align: center; 
-    margin: 300px;
+    margin: auto;
      
     
+}
+
+#userInstructions{
+    display: inline-block;
 }
 
 
